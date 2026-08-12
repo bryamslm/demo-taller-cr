@@ -12,3 +12,7 @@ node_modules/
 
 # vercel
 .vercel
+
+# artefactos del entorno compartido de desarrollo
+pnpm-workspace.yaml
+pnpm-lock.yaml
