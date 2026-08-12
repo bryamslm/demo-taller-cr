@@ -1,0 +1,305 @@
+---
+/**
+ * Demo: taller mecánico / A-C automotriz.
+ * Negocio FICTICIO. Segmento más grande del CSV de prospección (165 de 469).
+ *
+ * Densidad del first-screen: nav + titular + párrafo + dos CTA = 5 elementos.
+ * El asset es el único gráfico: sin badges, sin iconos decorativos, sin tarjetas.
+ */
+import Base from '../layouts/Base.astro';
+
+const brand = 'Taller Arrieta';
+// Numero REAL de negocio de Bryam (8775 0508) con mensaje preescrito: el demo
+// es de un negocio ficticio, asi que el texto ya puesto le explica al que escribe
+// de donde viene y a Bryam de que rubro era el interesado.
+const whatsapp = 'https://wa.me/50687750508?text=Hola%20Bryam%2C%20vi%20la%20p%C3%A1gina%20de%20ejemplo%20del%20taller%20mec%C3%A1nico.%20Quiero%20una%20as%C3%AD%20para%20mi%20negocio.';
+
+const servicios = [
+  {
+    nombre: 'Diagnóstico por escáner',
+    desc: 'Leemos los códigos del carro y le explicamos qué significan, sin tecnicismos.',
+    meta: 'Todas las marcas',
+  },
+  {
+    nombre: 'Aire acondicionado',
+    desc: 'Carga de gas, detección de fugas, compresores y mangueras.',
+    meta: 'A/C automotriz',
+  },
+  {
+    nombre: 'Frenos y suspensión',
+    desc: 'Pastillas, discos, amortiguadores y revisión completa del tren delantero.',
+    meta: 'Seguridad',
+  },
+  {
+    nombre: 'Mantenimiento preventivo',
+    desc: 'Aceite, filtros, bujías y los puntos que evitan la varada cara.',
+    meta: 'Cada 5 000 km',
+  },
+  {
+    nombre: 'Revisión pre-RTV',
+    desc: 'Revisamos lo que mide la RTV antes de que vaya, para que pase de una.',
+    meta: 'Antes de la cita',
+  },
+];
+
+const proceso = [
+  {
+    n: '01',
+    titulo: 'Nos cuenta qué siente',
+    desc: 'Por WhatsApp. Un ruido, una luz encendida, algo que no se siente igual.',
+  },
+  {
+    n: '02',
+    titulo: 'Revisamos y cotizamos',
+    desc: 'Le decimos qué encontramos y cuánto cuesta, antes de tocar nada.',
+  },
+  {
+    n: '03',
+    titulo: 'Usted aprueba, nosotros trabajamos',
+    desc: 'Sin sorpresas en la factura. Si aparece algo más, se le consulta primero.',
+  },
+];
+---
+
+<Base
+  brand={brand}
+  whatsapp={whatsapp}
+  title="Taller Arrieta — Mecánica y aire acondicionado automotriz"
+  description="Taller mecánico con diagnóstico por escáner, aire acondicionado, frenos y mantenimiento preventivo. Cotización antes de trabajar."
+>
+  <!-- HERO. Cero overlay: el titular cae en la zona oscura del asset. -->
+  <section class="hero">
+    <div class="hero-media">
+      <img
+        src="/hero.webp"
+        alt="Mecánico trabajando en el motor de un carro con luz de taller"
+        fetchpriority="high"
+        decoding="async"
+        width="1920"
+        height="1080"
+        data-parallax
+      />
+    </div>
+
+    <div class="wrap hero-content">
+      <h1 class="display">
+        <span class="serif reveal">Diagnóstico honesto,</span>
+        <span class="sans reveal" data-delay="1">SIN VUELTAS</span>
+      </h1>
+      <p class="lead reveal" data-delay="2">
+        Le decimos qué tiene el carro y cuánto cuesta antes de meterle mano. Si no lo
+        necesita, se lo decimos también.
+      </p>
+      <div class="hero-actions reveal" data-delay="3">
+        <a class="btn btn-primary" href={whatsapp} target="_blank" rel="noopener">
+          Escribinos por WhatsApp
+        </a>
+        <a class="btn btn-ghost" href="#servicios">Ver servicios</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS: lista editorial, hairlines, cero tarjetas. -->
+  <section class="section" id="servicios">
+    <div class="wrap">
+      <p class="eyebrow reveal">Lo que hacemos</p>
+      <h2 class="section-title reveal" data-delay="1">
+        Todo lo que el carro necesita, en un solo lugar
+      </h2>
+      <p class="lead reveal" data-delay="2">
+        Trabajamos con vehículos de uso diario y de trabajo. Si no es algo que hagamos, se
+        lo decimos de una y le recomendamos con quién ir.
+      </p>
+
+      <div class="editorial">
+        {
+          servicios.map((s, i) => (
+            <div class="editorial-row reveal" data-delay={String(Math.min(i + 1, 4))}>
+              <h3 class="editorial-name">{s.nombre}</h3>
+              <p class="editorial-desc">{s.desc}</p>
+              <span class="editorial-meta">{s.meta}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESO: tres pasos, número en acento (único lugar deliberado del color). -->
+  <section class="section proceso" id="proceso">
+    <div class="wrap">
+      <p class="eyebrow reveal">Cómo trabajamos</p>
+      <h2 class="section-title reveal" data-delay="1">Tres pasos y ninguna sorpresa</h2>
+
+      <div class="pasos">
+        {
+          proceso.map((p, i) => (
+            <article class="paso reveal" data-delay={String(i + 1)}>
+              <span class="paso-num">{p.n}</span>
+              <h3 class="paso-titulo">{p.titulo}</h3>
+              <p class="paso-desc">{p.desc}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- UBICACIÓN + CIERRE -->
+  <section class="section" id="ubicacion">
+    <div class="wrap ubicacion-grid">
+      <div class="reveal">
+        <p class="eyebrow">Dónde estamos</p>
+        <h2 class="section-title">Fácil de llegar, fácil de escribir</h2>
+        <p class="lead">
+          Estamos sobre la calle principal, a 200 metros de la escuela. Si viene de fuera de
+          la zona, mándenos un mensaje y le pasamos la ubicación exacta.
+        </p>
+        <a class="btn btn-primary" href={whatsapp} target="_blank" rel="noopener">
+          Pedir una cita
+        </a>
+      </div>
+
+      <dl class="datos reveal" data-delay="2">
+        <div>
+          <dt>Horario</dt>
+          <dd>Lunes a viernes, 7:00 a. m. – 5:00 p. m.</dd>
+        </div>
+        <div>
+          <dt>Sábados</dt>
+          <dd>7:00 a. m. – 12:00 m. d.</dd>
+        </div>
+        <div>
+          <dt>Pago</dt>
+          <dd>Efectivo, Sinpe Móvil y tarjeta</dd>
+        </div>
+        <div>
+          <dt>Grúa</dt>
+          <dd>Coordinamos si el carro no arranca</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ─── Hero ─────────────────────────────────────────────────────────────── */
+  /* 100dvh, no 100vh: el chrome móvil recorta la sección con vh. */
+  .hero {
+    position: relative;
+    min-height: 100dvh;
+    display: flex;
+    align-items: flex-start;
+    padding-top: clamp(7rem, 18vh, 11rem);
+    padding-bottom: clamp(3rem, 10vh, 6rem);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+    transform: scale(1.06);
+    will-change: transform;
+  }
+
+  /* Única concesión de degradado: NO es un scrim sobre el titular (el asset ya
+     es oscuro arriba), es la disolución del asset hacia el color de página en el
+     borde inferior, para que la sección siguiente no entre con un corte seco. */
+  .hero-media::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 38%;
+    background: linear-gradient(to bottom, transparent, var(--bg));
+  }
+
+  .hero-content {
+    position: relative;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+  }
+
+  /* ─── Proceso ──────────────────────────────────────────────────────────── */
+  .pasos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+    margin-top: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .paso {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  /* El acento aparece acá y en el CTA. En ningún otro lado. */
+  .paso-num {
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+  }
+
+  .paso-titulo {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text);
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+
+  .paso-desc {
+    margin: 0;
+    font-size: 0.98rem;
+  }
+
+  /* ─── Ubicación ────────────────────────────────────────────────────────── */
+  .ubicacion-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .datos {
+    margin: 0;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .datos > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    justify-content: space-between;
+    padding-block: 1.05rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .datos dt {
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-mute);
+  }
+
+  .datos dd {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.98rem;
+    text-align: right;
+  }
+</style>

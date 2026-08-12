@@ -1,0 +1,221 @@
+---
+/**
+ * Layout base de los demos. Un solo archivo: nav en cápsula, slot, footer con la
+ * nota de demostración y el observer de entrada escalonada.
+ *
+ * Sin overlays sobre el asset (método cinematic-public-pages): la legibilidad se
+ * resolvió en el encuadre de la imagen, no con un velo encima.
+ */
+import '../styles/tokens.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Marca del negocio ficticio, sale en el nav y el footer. */
+  brand: string;
+  whatsapp: string;
+}
+
+const { title, description, brand, whatsapp } = Astro.props;
+
+const nav = [
+  { label: 'Servicios', href: '#servicios' },
+  { label: 'Cómo trabajamos', href: '#proceso' },
+  { label: 'Dónde estamos', href: '#ubicacion' },
+];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#09090b" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="preload" as="image" href="/hero.webp" fetchpriority="high" />
+    <!-- Marca el documento ANTES del primer paint: sin esta clase el CSS no
+         esconde nada, así una falla de JS nunca deja la página en blanco. -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    <header class="nav-bar">
+      <div class="nav-capsule">
+        <a class="nav-brand" href="#top">{brand}</a>
+        <nav class="nav-links">
+          {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+        </nav>
+        <a class="btn btn-primary nav-cta" href={whatsapp} target="_blank" rel="noopener">
+          WhatsApp
+        </a>
+      </div>
+    </header>
+
+    <main id="top">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-inner">
+        <p class="footer-brand">{brand}</p>
+        <p class="footer-note">
+          Ejemplo de demostración. Negocio ficticio creado para mostrar el estilo de una
+          página web para negocios de Costa Rica.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // Entrada escalonada ligada al scroll. Se desarma al entrar: una sola vez.
+      const items = document.querySelectorAll<HTMLElement>('.reveal');
+      const showAll = () => items.forEach((el) => el.classList.add('is-in'));
+
+      // Red de seguridad: si a los 2,5 s algo no se reveló (pestaña en segundo
+      // plano al cargar, observer que no corre, navegador raro), se muestra todo.
+      // El usuario nunca se queda mirando un hueco vacío.
+      setTimeout(showAll, 2500);
+
+      if (
+        'IntersectionObserver' in window &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+        items.length
+      ) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-in');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.1 },
+        );
+        items.forEach((el) => io.observe(el));
+
+        // Parallax del héroe: el asset se mueve la mitad que el scroll, así el
+        // titular se despega de la imagen sin necesidad de ningún velo.
+        const heroImg = document.querySelector<HTMLElement>('[data-parallax]');
+        if (heroImg) {
+          let ticking = false;
+          const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+              const y = Math.min(window.scrollY, window.innerHeight);
+              heroImg.style.transform = `translate3d(0, ${y * 0.28}px, 0) scale(1.06)`;
+              ticking = false;
+            });
+          };
+          window.addEventListener('scroll', onScroll, { passive: true });
+          onScroll();
+        }
+      } else {
+        showAll();
+      }
+    </script>
+
+    <style>
+      .nav-bar {
+        position: fixed;
+        top: clamp(0.75rem, 2vw, 1.5rem);
+        left: 0;
+        right: 0;
+        z-index: 40;
+        display: flex;
+        justify-content: center;
+        padding-inline: var(--pad);
+        pointer-events: none;
+      }
+
+      .nav-capsule {
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
+        gap: clamp(0.75rem, 3vw, 2rem);
+        width: 100%;
+        max-width: var(--maxw);
+        padding: 0.5rem 0.5rem 0.5rem 1.35rem;
+        border-radius: 999px;
+        background: rgba(12, 12, 16, 0.62);
+        backdrop-filter: blur(16px);
+        border: 1px solid var(--hairline);
+      }
+
+      .nav-brand {
+        font-family: var(--font-display);
+        font-style: italic;
+        font-size: 1.05rem;
+        color: var(--text);
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 1.6rem;
+        margin-left: auto;
+        font-size: 0.9rem;
+      }
+
+      .nav-links a {
+        color: var(--text-body);
+        text-decoration: none;
+        transition: color 0.2s var(--ease);
+      }
+
+      .nav-links a:hover {
+        color: var(--text);
+      }
+
+      .nav-cta {
+        padding: 0.7rem 1.35rem;
+        font-size: 0.9rem;
+      }
+
+      /* Bajo md el nav se reduce a marca + CTA: el menú completo no cabe en
+         cápsula y una hamburguesa para 3 anclas es ruido. */
+      @media (max-width: 780px) {
+        .nav-links {
+          display: none;
+        }
+        .nav-cta {
+          margin-left: auto;
+        }
+      }
+
+      .site-footer {
+        border-top: 1px solid var(--hairline);
+        padding-block: clamp(2.5rem, 6vw, 4rem);
+      }
+
+      .footer-inner {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem 2.5rem;
+        align-items: baseline;
+        justify-content: space-between;
+      }
+
+      .footer-brand {
+        font-family: var(--font-display);
+        font-style: italic;
+        font-size: 1.15rem;
+        color: var(--text);
+        margin: 0;
+      }
+
+      .footer-note {
+        margin: 0;
+        font-size: 0.82rem;
+        color: var(--text-mute);
+        max-width: 52ch;
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+# build
+dist/
+.astro/
+
+# dependencias
+node_modules/
+
+# entorno
+.env
+.env.local
+.DS_Store
+
+# vercel
+.vercel
