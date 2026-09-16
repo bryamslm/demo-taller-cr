@@ -223,6 +223,29 @@ const proceso = [
     background: linear-gradient(to bottom, transparent, var(--bg));
   }
 
+  /* En el teléfono la foto apaisada recortada al centro cae en la zona oscura del
+     motor y el héroe se ve negro: el asset se desperdicia. Así que abajo de 780 px
+     la foto deja de ser fondo y pasa a ocupar la mitad de arriba, encuadrada en las
+     manos y la luz, con el titular debajo sobre negro sólido. */
+  @media (max-width: 780px) {
+    .hero {
+      min-height: auto;
+      padding-top: 52vh;
+      padding-bottom: 2.5rem;
+    }
+    .hero-media {
+      inset: 0 0 auto 0;
+      height: 56vh;
+    }
+    .hero-media img {
+      object-position: 64% 42%;
+      transform: scale(1.02);
+    }
+    .hero-media::after {
+      height: 46%;
+    }
+  }
+
   .hero-content {
     position: relative;
   }

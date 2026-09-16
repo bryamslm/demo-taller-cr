@@ -127,7 +127,12 @@ const nav = [
 
         // Parallax del héroe: el asset se mueve la mitad que el scroll, así el
         // titular se despega de la imagen sin necesidad de ningún velo.
-        const heroImg = document.querySelector<HTMLElement>('[data-parallax]');
+        // El parallax es de escritorio. En el telefono la foto ya no es fondo: ocupa
+        // la mitad de arriba y moverla destaparia el borde superior.
+        const heroImg =
+          window.matchMedia('(min-width: 781px)').matches
+            ? document.querySelector<HTMLElement>('[data-parallax]')
+            : null;
         if (heroImg) {
           let ticking = false;
           const onScroll = () => {
