@@ -230,12 +230,14 @@ const proceso = [
   @media (max-width: 780px) {
     .hero {
       min-height: auto;
-      padding-top: 52vh;
+      /* El titular empieza DESPUES de la foto, sobre negro solido: encima del
+         degradado se lee a medias y es justo lo que hay que evitar. */
+      padding-top: calc(50vh + 0.75rem);
       padding-bottom: 2.5rem;
     }
     .hero-media {
       inset: 0 0 auto 0;
-      height: 56vh;
+      height: 50vh;
     }
     .hero-media img {
       object-position: 64% 42%;
