@@ -181,7 +181,10 @@ const nav = [
 
       .nav-brand {
         font-family: var(--font-display);
-        font-style: italic;
+        /* Anton no tiene itálica: la falsa que dibuja el navegador se ve barata. */
+        font-style: normal;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
         font-size: 1.05rem;
         color: var(--text);
         text-decoration: none;
@@ -236,7 +239,9 @@ const nav = [
 
       .footer-brand {
         font-family: var(--font-display);
-        font-style: italic;
+        font-style: normal;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
         font-size: 1.15rem;
         color: var(--text);
         margin: 0;
