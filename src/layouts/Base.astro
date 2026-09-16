@@ -19,6 +19,9 @@ interface Props {
 
 const { title, description, brand, whatsapp } = Astro.props;
 
+/** Base absoluta para og:image: WhatsApp descarta una imagen con ruta relativa. */
+const site = Astro.site ?? new URL('https://demo-taller-cr.vercel.app');
+
 const nav = [
   { label: 'Servicios', href: '#servicios' },
   { label: 'Cómo trabajamos', href: '#proceso' },
@@ -37,6 +40,18 @@ const nav = [
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={site} />
+    <meta property="og:locale" content="es_CR" />
+    <!-- Sin og:image WhatsApp manda el enlace pelado: probado el 14 sep 2026 contra
+         un teléfono real, donde los demos con imagen mostraron tarjeta y este no. -->
+    <meta property="og:image" content={new URL('/og/home-es.jpg', site).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL('/og/home-es.jpg', site).href} />
     <link rel="preload" as="image" href="/hero.webp" fetchpriority="high" />
     <!-- Marca el documento ANTES del primer paint: sin esta clase el CSS no
          esconde nada, así una falla de JS nunca deja la página en blanco. -->
