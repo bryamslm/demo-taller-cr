@@ -84,7 +84,7 @@ const proceso = [
     <div class="wrap hero-content">
       <h1 class="display">
         <span class="serif reveal">Diagnóstico honesto,</span>
-        <span class="sans reveal" data-delay="1">SIN VUELTAS</span>
+        <span class="sans reveal" data-delay="1">Sin <em>vueltas</em></span>
       </h1>
       <p class="lead reveal" data-delay="2">
         Le decimos qué tiene el carro y cuánto cuesta antes de meterle mano. Si no lo
@@ -115,6 +115,7 @@ const proceso = [
         {
           servicios.map((s, i) => (
             <div class="editorial-row reveal" data-delay={String(Math.min(i + 1, 4))}>
+              <span class="editorial-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
               <h3 class="editorial-name">{s.nombre}</h3>
               <p class="editorial-desc">{s.desc}</p>
               <span class="editorial-meta">{s.meta}</span>

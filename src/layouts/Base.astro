@@ -76,6 +76,17 @@ const nav = [
       <slot />
     </main>
 
+    <!-- Barra fija: en el teléfono la acción tiene que estar siempre a un pulgar. -->
+    <div class="dock">
+      <a class="dock-btn" href={whatsapp} target="_blank" rel="noopener">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.9-.9L3 21l2-4.9A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"></path>
+        </svg>
+        Escribir por WhatsApp
+      </a>
+      <p class="dock-note">Le contestamos hoy mismo · Sin llamar</p>
+    </div>
+
     <footer class="site-footer">
       <div class="wrap footer-inner">
         <p class="footer-brand">{brand}</p>

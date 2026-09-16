@@ -6,7 +6,7 @@
  * guiones ni labels decorativos (ese reparto es el tell nº1 de página generada).
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,500&family=Inter:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&display=swap');
 
 :root {
   /* Fondo: casi-negro, NO negro puro — el negro puro aplasta el degradado del asset */
@@ -25,8 +25,14 @@
   --maxw: 1180px;
   --pad: clamp(1.25rem, 5vw, 3.5rem);
 
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Anton para titulares y Space Grotesk para todo lo demás. Inter quedó fuera a
+     propósito: es la tipografía por defecto de media internet y hace que la página
+     se lea como plantilla. La tensión ahora la da el peso, no dos familias. */
+  --font-display: 'Anton', 'Arial Narrow', sans-serif;
+  --font-sans: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Alto de la barra fija de WhatsApp en móvil, para que nada quede debajo. */
+  --dock-h: 5.25rem;
 
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -74,22 +80,34 @@ a {
   letter-spacing: -0.03em;
 }
 
+/* Línea 1: la frase que ubica, en cuerpo alto y con aire. Línea 2: el golpe, en
+   Anton, mayúscula y con interlínea cerrada. En el teléfono la línea 2 tiene que
+   entrar completa antes del primer scroll: por eso arranca en 3.4rem y no en 2.75. */
 .display .serif {
   display: block;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(2rem, 1.3rem + 3.4vw, 4rem);
-  letter-spacing: -0.01em;
-  color: var(--text);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: clamp(1.15rem, 0.95rem + 1vw, 1.75rem);
+  letter-spacing: 0.005em;
+  line-height: 1.25;
+  color: var(--text-body);
+  margin-bottom: 0.35rem;
 }
 
 .display .sans {
   display: block;
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: clamp(2.75rem, 1.6rem + 5.6vw, 6.5rem);
-  letter-spacing: -0.045em;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3.4rem, 1.9rem + 6.4vw, 7rem);
+  line-height: 0.86;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+}
+
+/* La palabra que el acento se gana: una por página, en el titular. */
+.display .sans em {
+  font-style: normal;
+  color: var(--accent);
 }
 
 .eyebrow {
@@ -102,13 +120,15 @@ a {
 }
 
 .section-title {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: clamp(1.75rem, 1.2rem + 2.4vw, 3rem);
-  letter-spacing: -0.035em;
-  line-height: 1.05;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.1rem, 1.4rem + 3vw, 3.5rem);
+  letter-spacing: 0;
+  line-height: 0.95;
+  text-transform: uppercase;
   color: var(--text);
   margin: 0 0 1rem;
+  max-width: 18ch;
 }
 
 .lead {
@@ -175,20 +195,31 @@ a {
 
 .editorial-row {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.6fr) auto;
+  grid-template-columns: auto minmax(0, 1.1fr) minmax(0, 1.6fr) auto;
   gap: clamp(0.5rem, 3vw, 2.5rem);
   align-items: baseline;
   padding-block: clamp(1.4rem, 3vw, 2.1rem);
   border-bottom: 1px solid var(--hairline);
 }
 
-.editorial-name {
+/* El numeral es el ancla de la lista: en el teléfono es lo primero que cae el ojo
+   y lo que hace que se lea como índice y no como un montón de párrafos. */
+.editorial-num {
   font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(1.35rem, 1rem + 1.4vw, 2rem);
+  font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.5rem);
+  line-height: 1;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  min-width: 2.2ch;
+}
+
+.editorial-name {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(1.2rem, 1rem + 1vw, 1.7rem);
+  letter-spacing: -0.02em;
   color: var(--text);
-  line-height: 1.1;
+  line-height: 1.15;
   margin: 0;
 }
 
@@ -208,11 +239,71 @@ a {
 
 @media (max-width: 720px) {
   .editorial-row {
-    grid-template-columns: 1fr;
-    gap: 0.4rem;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.85rem;
+    row-gap: 0.35rem;
+  }
+  .editorial-num {
+    grid-row: 1 / span 3;
+    align-self: start;
+    padding-top: 0.2rem;
   }
   .editorial-meta {
     order: -1;
+  }
+}
+
+/* ─── Barra fija de WhatsApp: la acción siempre bajo el pulgar ───────────── */
+/* En el teléfono el CTA del héroe se va con el primer scroll y el del nav es
+   chiquito. Esta barra es la razón por la que la página convierte: 56 px de alto,
+   verde de WhatsApp, y nunca se mueve. En escritorio no aparece: ahí el nav basta. */
+
+.dock {
+  display: none;
+}
+
+@media (max-width: 780px) {
+  body {
+    padding-bottom: calc(var(--dock-h) + env(safe-area-inset-bottom));
+  }
+
+  .dock {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    display: block;
+    padding: 0.6rem 1rem calc(0.6rem + env(safe-area-inset-bottom));
+    background: rgba(9, 9, 11, 0.93);
+    border-top: 1px solid var(--hairline);
+    backdrop-filter: blur(14px);
+  }
+
+  .dock-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    height: 3.5rem;
+    border-radius: 0.9rem;
+    background: #25d366;
+    color: #06210f;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+  }
+
+  .dock-note {
+    margin: 0.45rem 0 0;
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--text-mute);
+  }
+
+  /* El CTA fantasma del héroe sobra cuando la barra ya está abajo. */
+  .hero-actions .btn-ghost {
+    display: none;
   }
 }
 
